@@ -164,18 +164,20 @@ function removeHash () {
     if ("pushState" in history)
         history.pushState("", document.title, loc.pathname + loc.search);
     else {
+        window.scrollTo(0,0);
         // Prevent scrolling by storing the page's current scroll offset
-        scrollV = document.body.scrollTop;
-        scrollH = document.body.scrollLeft;
+        // scrollV = document.body.scrollTop;
+        // scrollH = document.body.scrollLeft;
 
         loc.hash = "";
 
         // Restore the scroll offset, should be flicker free
-        document.body.scrollTop = scrollV;
-        document.body.scrollLeft = scrollH;
+        // document.body.scrollTop = scrollV;
+        // document.body.scrollLeft = scrollH;
+
+        console.log('removed hash');
     }
 }
-
 
 form.addEventListener('submit', callbackFunction);
 
@@ -196,19 +198,27 @@ function callbackFunction(event) {
         },
         body: JSON.stringify(formDataObj),
     }).then((result) => {
-        //view sent message 
-        setInterval( () => {
-            msgSent.style.display = "none";
-        }, 3000);
-        msgSent.style.display = "block";
-        removeHash();
-        window.scroll(0,0);
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     });
+
+    //scroll to top
+    window.scrollTo(0,0);
+
+    //view sent message
+    setInterval( () => {
+        msgSent.style.display = "none";
+    }, 3000);
+    msgSent.style.display = "block";
+    
+    //remove hash
+    removeHash();
 
     //reset form and remove validation message
     form.reset();
     emailSmall.innerHTML="";
-    contactNumberSmall.innerHTML="";
+    contactNumberSmall.innerHTML="";    
 };
 
 /*==================== SCROLL SECTIONS ACTIVE LINK ====================*/
@@ -284,3 +294,4 @@ themeButton.addEventListener('click', () => {
     localStorage.setItem('selected-theme', getCurrentTheme());
     localStorage.setItem('selected-icon', getCurrentIcon());
 })
+
